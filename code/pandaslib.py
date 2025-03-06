@@ -9,7 +9,8 @@ def get_column_names(df : pd.DataFrame) -> list[str]:
     Get all column names of a pandas dataframe df
     Returns the names as a list of string
     '''
-    pass # todo: replace this line and add your code
+    col_names = list(df.columns)
+    return col_names
 
 
 def get_columns_of_type(df : pd.DataFrame, numpy_type: any) -> list[str]:
@@ -17,14 +18,17 @@ def get_columns_of_type(df : pd.DataFrame, numpy_type: any) -> list[str]:
     Return the column names of a pandas dataframe only when 
     the values in the column match the numpy_type
     '''
-    pass # todo: replace this line and add your code
+    newDF = df.select_dtypes(include = numpy_type)
+    col_names = list(newDF.columns)
+    return col_names
 
 
 def get_unique_values(df : pd.DataFrame, column_name: str) -> list:
     '''
     Get a list of unique values of a column in a pandas dataframe
     '''
-    pass # todo: replace this line and add your code
+    unique_list = list(df[column_name].unique())
+    return unique_list
 
 def get_file_extension(file_path : str) -> str:
     '''
@@ -34,7 +38,9 @@ def get_file_extension(file_path : str) -> str:
     'countries.json' -> 'json'
 
     '''
-    pass # todo: replace this line and add your code
+    file_split = file_path.split(".")
+    file_extension = file_split[1]
+    return file_extension
 
 def load_file(file_path: str, ext: str) -> pd.DataFrame:
     '''
@@ -44,7 +50,16 @@ def load_file(file_path: str, ext: str) -> pd.DataFrame:
     - when csv assume first row is header
     - when json assume record-oriented data
     '''
-    pass # todo: replace this line and add your code
+    if ext == "csv":
+        newDF = pd.read_csv(file_path, header = 0)
+    elif ext == "json":
+        newDF = pd.read_json(file_path, orient = "records")
+    elif ext == "xlsx" or ext == "xls":
+        newDF = pd.read_excel(file_path)
+    else:
+        print("Unrecognized file type, unable to read")
+    
+    return newDF
 
 if __name__ == '__main__':
     df = pd.DataFrame({ 
@@ -64,8 +79,14 @@ if __name__ == '__main__':
     unique = get_unique_values(df, 'state')
     print(f"Unique States: {unique}")
 
+    assert get_file_extension("example.csv") == "csv"
+    assert get_file_extension("data/files/idk/example.json") == "json"
+    assert get_file_extension("askdsajdaslkj/example.xls") == "xls"
 
+    test_file_path = "data/car_owners.csv"
+    test_df = load_file(test_file_path, "csv")
+    print(test_df.head())
 
-
-
-    # solution pandaslib.py
+    test_file_path2 = "data/car_owners.json"
+    test_df2 = load_file(test_file_path2, "json")
+    print(test_df2.head())
