@@ -6,7 +6,6 @@ import numpy as np
 st.title("UniBrow")
 st.caption("The Universal data browser")
 
-# TODO Write code here to complete the unibrow.py
 dataset = st.file_uploader("Please upload file: ")
 
 
